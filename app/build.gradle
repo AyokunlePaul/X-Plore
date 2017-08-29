@@ -1,11 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
+    }
+
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "i.am.eipeks.x_plore"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
