@@ -1,11 +1,14 @@
 package i.am.eipeks.x_plore._activities;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import i.am.eipeks.x_plore.R;
@@ -18,10 +21,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class Home extends AppCompatActivity implements View.OnFocusChangeListener {
+public class Home extends AppCompatActivity implements
+        View.OnFocusChangeListener,
+        View.OnClickListener{
 
     private EditText password, name;
-
+    private Button login;
     private TextInputLayout passwordInputLayout, nameInputLayout;
 
     private DisposableObserver<String> passwordObserver;
@@ -34,12 +39,14 @@ public class Home extends AppCompatActivity implements View.OnFocusChangeListene
 
         password = (EditText) findViewById(R.id.password);
         name = (EditText) findViewById(R.id.name);
+        login = (Button) findViewById(R.id.login);
 
         passwordInputLayout = (TextInputLayout) findViewById(R.id.password_input_layout);
         nameInputLayout = (TextInputLayout) findViewById(R.id.name_input_layout);
 
         password.setOnFocusChangeListener(this);
         name.setOnFocusChangeListener(this);
+        login.setOnClickListener(this);
 
         passwordObservable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -68,6 +75,7 @@ public class Home extends AppCompatActivity implements View.OnFocusChangeListene
     public void onFocusChange(View view, boolean b) {
         switch (view.getId()){
             case R.id.password:
+                passwordInputLayout.setErrorEnabled(true);
                 if (passwordObserver == null){
                     passwordObserver = passwordObservable
                             .subscribeOn(Schedulers.io())
@@ -76,7 +84,6 @@ public class Home extends AppCompatActivity implements View.OnFocusChangeListene
                                 @Override
                                 public void onNext(@NonNull String s) {
                                     if (s.length() < 8){
-                                        passwordInputLayout.setErrorEnabled(true);
                                         passwordInputLayout.setError("Password must be at least 8-digits long");
                                     } else {
                                         onComplete();
@@ -96,10 +103,21 @@ public class Home extends AppCompatActivity implements View.OnFocusChangeListene
                 }
                 break;
             case R.id.name:
-                passwordInputLayout.setErrorEnabled(false);
+                if (!(password.getText().toString().length() < 8)){
+                    passwordInputLayout.setErrorEnabled(false);
+                }
                 if (passwordObserver != null){
                     passwordObserver = null;
                 }
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.login:
+                startActivity(new Intent(this, Main.class));
                 break;
         }
     }
