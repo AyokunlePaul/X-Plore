@@ -11,4 +11,31 @@
         android:background="#90daf1"
         app:headerLayout="@layout/activity_main_nav_header"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="3dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/add_new_task"
+            android:text="@string/no_task_yet"
+            android:textSize="50sp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:fontFamily="serif-monospace"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_add_circle_30dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:id="@+id/add_new_task"/>
+
+    </RelativeLayout>
+
 </android.support.v4.widget.DrawerLayout>

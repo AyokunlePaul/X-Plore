@@ -1,10 +1,12 @@
 package i.am.eipeks.x_plore._activities;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -75,7 +77,6 @@ public class Home extends AppCompatActivity implements
     public void onFocusChange(View view, boolean b) {
         switch (view.getId()){
             case R.id.password:
-                passwordInputLayout.setErrorEnabled(true);
                 if (passwordObserver == null){
                     passwordObserver = passwordObservable
                             .subscribeOn(Schedulers.io())
@@ -84,9 +85,10 @@ public class Home extends AppCompatActivity implements
                                 @Override
                                 public void onNext(@NonNull String s) {
                                     if (s.length() < 8){
+                                        passwordInputLayout.setErrorEnabled(true);
                                         passwordInputLayout.setError("Password must be at least 8-digits long");
                                     } else {
-                                        onComplete();
+                                        passwordInputLayout.setErrorEnabled(false);
                                     }
                                 }
 
@@ -97,7 +99,7 @@ public class Home extends AppCompatActivity implements
 
                                 @Override
                                 public void onComplete() {
-                                    passwordInputLayout.setErrorEnabled(false);
+
                                 }
                             });
                 }
@@ -117,6 +119,9 @@ public class Home extends AppCompatActivity implements
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login:
+                if (!(TextUtils.isEmpty(password.getText()) && TextUtils.isEmpty(name.getText()))){
+                    Snackbar.make(view, "Fields cannot be empty", Snackbar.LENGTH_SHORT).show();
+                }
                 startActivity(new Intent(this, Main.class));
                 break;
         }
